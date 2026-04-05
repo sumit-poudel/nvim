@@ -3,7 +3,6 @@ vim.pack.add({
         src = "https://github.com/nvim-mini/mini.nvim",
     },
 })
-vim.cmd("packadd mini.nvim") 
 require("mini.ai").setup({})
 require("mini.comment").setup({})
 require("mini.move").setup({})

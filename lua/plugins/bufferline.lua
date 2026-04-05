@@ -9,9 +9,9 @@ vim.pack.add({
 require("bufferline").setup({
     options = {
         mode = "buffers",
-        numbers           = "ordinal",       -- show buffer numbers
-        diagnostics       = "nvim_lsp",      -- show LSP errors in bufferline
-        separator_style   = "slant",         -- slant | slope | thick | thin
+        numbers           = "ordinal",
+        diagnostics       = "nvim_lsp",
+        separator_style   = "slant",
         tab_size = 21,
         offsets = {
             {
@@ -20,6 +20,15 @@ require("bufferline").setup({
                 highlight = "Directory",
                 text_align = "left",
             }
-        }
+        },
+        close_command = function(buf)
+            require("mini.bufremove").delete(buf, false)
+        end,
+        middle_mouse_command = function(buf)
+            require("mini.bufremove").delete(buf, false)
+        end,
+        right_mouse_command = function(buf)
+            require("mini.bufremove").delete(buf, false)
+        end,
     }
 })
