@@ -57,6 +57,5 @@ vim.keymap.set("n", "<leader>td", function()
 	vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { desc = "Toggle diagnostics" })
 
-
 -- Neo tree
-vim.keymap.set("n", "<leader>e",":Neotree show toggle<CR>",{ desc = "Toggle Neo tree" })
+vim.keymap.set("n", "<leader>e", ":Neotree show toggle<CR>", { desc = "Toggle Neo tree" })
