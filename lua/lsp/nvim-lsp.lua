@@ -5,10 +5,10 @@ vim.pack.add({
 local augroup = vim.api.nvim_create_augroup("UserLSP", { clear = true })
 
 local diagnostic_signs = {
-	Error = " ",
-	Warn = " ",
-	Hint = "",
-	Info = "",
+    Error = " ",
+    Warn = " ",
+    Hint = "",
+    Info = "",
 }
 
 vim.diagnostic.config({
@@ -83,9 +83,24 @@ vim.keymap.set("n", "<leader>dl", vim.diagnostic.open_float, { desc = "Show line
 vim.lsp.config["*"] = { capabilities = require("blink.cmp").get_lsp_capabilities() }
 vim.lsp.config("lua_ls", { settings = { Lua = { diagnostics = { globals = { "vim" } }, telemetry = { enable = false } } } })
 vim.lsp.config("emmet_ls", {
-    filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte", "astro" },
+    filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte", "astro", "php" },
 })
-vim.lsp.config("astro", {})
+vim.lsp.config("astro", {
+    init_options = {
+        typescript = {
+            tsdk = (function()
+                -- try local project first
+                local local_ts = vim.fn.getcwd() .. "/node_modules/typescript/lib"
+                if vim.fn.isdirectory(local_ts) == 1 then
+                    return local_ts
+                end
+                -- fallback to mason
+                return vim.fn.expand("~/.local/share/nvim/mason/packages/typescript-language-server/node_modules/typescript/lib")
+            end)(),
+        },
+    },
+})
+vim.lsp.config("tailwindcss", {})
 vim.lsp.config("cssls", {})
 vim.lsp.config("html", {})
 vim.lsp.config("pyright", {})
@@ -93,8 +108,10 @@ vim.lsp.config("bashls", {})
 vim.lsp.config("ts_ls", {})
 vim.lsp.config("gopls", {})
 vim.lsp.config("clangd", {})
+vim.lsp.config("csharp_ls", {})
+vim.lsp.config("phpactor", {})
 
 vim.lsp.enable({
-    "lua_ls", "pyright", "bashls", "ts_ls", "gopls", "clangd", "efm",
-    "emmet_ls", "astro", "cssls", "html",
+    "lua_ls", "pyright", "bashls", "ts_ls", "gopls", "clangd", "csharp_ls" ,"efm",
+    "emmet_ls", "astro", "cssls", "html", "tailwindcss", "phpactor",
 })

@@ -3,10 +3,10 @@ vim.pack.add({
         src = "https://github.com/saghen/blink.cmp",
         version = vim.version.range("1.*"),
     },
-    "https://github.com/L3MON4D3/LuaSnip",
+    { src = "https://github.com/rafamadriz/friendly-snippets" },
 })
 vim.cmd("packadd blink.cmp")
-vim.cmd("packadd LuaSnip")
+vim.cmd("packadd friendly-snippets")
 
 require("blink.cmp").setup({
     keymap = {
@@ -19,17 +19,23 @@ require("blink.cmp").setup({
         ["<C-b>"] = { "snippet_backward", "fallback" },
     },
     appearance = { nerd_font_variant = "mono" },
-    completion = { menu = { auto_show = true } },
+    completion = { 
+        menu = { auto_show = true },
+        trigger = { show_on_trigger_character = true },
+    },
     sources = {
-        default = { "lsp", "path", "buffer", "snippets", "codeium" },
+        default = { "snippets", "lsp", "path", "buffer", "codeium" },
         providers = {
+            lsp = {
+                score_offset = 100,
+            },
+            snippets = {
+                opts = {
+                    friendly_snippets = true,
+                },
+            },
             codeium = { name = "Codeium", module = "codeium.blink", async = true },
         },
-    },
-    snippets = {
-        expand = function(snippet)
-            require("luasnip").lsp_expand(snippet)
-        end,
     },
     fuzzy = {
         implementation = "prefer_rust",

@@ -16,9 +16,16 @@ local cpplint = require("efmls-configs.linters.cpplint")
 local clangfmt = require("efmls-configs.formatters.clang_format")
 local go_revive = require("efmls-configs.linters.go_revive")
 local gofumpt = require("efmls-configs.formatters.gofumpt")
+local phpcsfixer = require("efmls-configs.formatters.php_cs_fixer")
+local phpcs = require("efmls-configs.linters.phpcs")
+local csharpier = {
+    formatCommand = "dotnet csharpier --write-stdout",
+    formatStdin = true,
+}
 
 vim.lsp.config("efm", {
-    filetypes = { "c", "cpp", "css", "go", "html", "javascript", "javascriptreact", "json", "jsonc", "lua", "markdown", "python", "sh", "typescript", "typescriptreact", "vue", "svelte", "astro" },
+    root_markers = { ".git","package.json","composer.json" },
+    filetypes = { "c", "cpp", "css", "go", "html", "javascript", "javascriptreact", "json", "jsonc", "lua", "markdown", "python", "sh", "typescript", "typescriptreact", "vue","cs" ,"svelte", "astro", "php" },
     init_options = { documentFormatting = true },
     settings = {
         languages = {
@@ -40,6 +47,8 @@ vim.lsp.config("efm", {
             vue = { eslint_d, prettier_d },
             svelte = { eslint_d, prettier_d },
             astro = { prettier_d },
+            cs = { csharpier },
+            php = { phpcsfixer, phpcs },
         },
     },
 })
