@@ -40,7 +40,6 @@ opt.lazyredraw = true -- do not redraw during macros
 opt.synmaxcol = 300 -- syntax highlighting limit
 opt.fillchars = { eob = " " } -- hide "~" on empty lines
 
-
 local undodir = vim.fn.expand("~/.vim/undodir")
 if
 	vim.fn.isdirectory(undodir) == 0 -- create undodir if nonexistent
@@ -87,4 +86,3 @@ opt.wildmode = "longest:full,full" -- complete longest common match, full comple
 opt.diffopt:append("linematch:60") -- improve diff display
 opt.redrawtime = 10000 -- increase neovim redraw tolerance
 opt.maxmempattern = 20000 -- increase max memory
-

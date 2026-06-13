@@ -20,6 +20,7 @@ local opts = {
 		c = { "clang_format" },
 		cpp = { "clang_format" },
 		go = { "gofumpt" },
+		nix = { "nixfmt" },
 		vue = { "eslint_d", "prettierd" },
 		svelte = { "eslint_d", "prettierd" },
 		astro = { "prettierd" },
@@ -50,9 +51,5 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		require("conform").format({ bufnr = buf, timeout_ms = 2000, async = false })
 	end,
 })
-
-vim.keymap.set("n", "<leader>bf", function()
-	require("conform").format({ async = true, lsp_format = "fallback" })
-end, { desc = "Format buffer" })
 
 require("conform").setup(opts)
