@@ -114,16 +114,16 @@ vim.keymap.set("n", "<leader>e", ":Neotree reveal focus<CR>", { desc = "Explorer
 vim.keymap.set("n", "<leader>;", ":Neotree show toggle<CR>", { desc = "Explorer toggle" })
 
 -- ============================================================================
--- FILE / FZF  (f / g)
+-- FILE / FZF  (f)
 -- ============================================================================
 
 -- File finder  (Zed: space f)
-vim.keymap.set("n", "<leader>f", function()
+vim.keymap.set("n", "<leader>ff", function()
 	require("fzf-lua").files()
 end, { desc = "Find files" })
 
--- Live grep  (Zed: space g)
-vim.keymap.set("n", "<leader>g", function()
+-- Live grep  (moved from <leader>g — that prefix collides with the git group below)
+vim.keymap.set("n", "<leader>fg", function()
 	require("fzf-lua").live_grep()
 end, { desc = "Grep" })
 
@@ -145,9 +145,12 @@ end, { desc = "Format code" })
 -- ============================================================================
 -- COMMENTS  (Zed: space c)
 -- Requires Comment.nvim or mini.comment — mapped via remap=true so the plugin
--- handles the actual motion; works in normal and visual mode.
+-- handles the actual motion. Normal mode uses "gcc" (toggle current line);
+-- visual mode uses "gc" (toggle selection) — using "gcc" in visual mode left
+-- a stray "c" that triggered an unwanted change-operator afterwards.
 -- ============================================================================
-vim.keymap.set({ "n", "v" }, "<leader>c", "gcc", { remap = true, desc = "Toggle comment" })
+vim.keymap.set("n", "<leader>c", "gcc", { remap = true, desc = "Toggle comment" })
+vim.keymap.set("v", "<leader>c", "gc", { remap = true, desc = "Toggle comment" })
 
 -- ============================================================================
 -- SEARCH & REPLACE  (Zed: space r)
@@ -208,9 +211,8 @@ vim.keymap.set("n", "<leader>lf", function()
 	require("fzf-lua").lsp_references()
 end, { desc = "References" })
 
--- Hover docs  (Zed: space d  — also kept on li for muscle memory)
+-- Hover docs
 vim.keymap.set("n", "li", vim.lsp.buf.hover, { desc = "Hover docs" })
-vim.keymap.set("n", "<leader>d", vim.lsp.buf.hover, { desc = "Hover docs" })
 
 -- ============================================================================
 -- DIAGNOSTICS  (d / space j / space ')

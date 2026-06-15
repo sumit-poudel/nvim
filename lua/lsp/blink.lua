@@ -24,7 +24,7 @@ require("blink.cmp").setup({
 		trigger = { show_on_trigger_character = true },
 	},
 	sources = {
-		default = { "snippets", "lsp", "path", "buffer", "codeium" },
+		default = { "snippets", "lsp", "path", "buffer" },
 		providers = {
 			lsp = {
 				score_offset = 100,
@@ -34,7 +34,6 @@ require("blink.cmp").setup({
 					friendly_snippets = true,
 				},
 			},
-			codeium = { name = "Codeium", module = "codeium.blink", async = true },
 		},
 	},
 	fuzzy = {
