@@ -1,8 +1,0 @@
-require("plugins.neo-tree")
-require("plugins.mini")
-require("plugins.treesitter")
-require("plugins.fzf")
-require("plugins.gitsigns")
-require("plugins.base16")
-require("plugins.whichkey")
-require("plugins.aerial")

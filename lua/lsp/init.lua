@@ -1,5 +1,0 @@
-require("lsp.blink")
-require("lsp.nvim-lsp")
-require("lsp.mason")
-require("lsp.conform")
-require("lsp.lint")
