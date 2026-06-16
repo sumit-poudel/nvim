@@ -2,10 +2,14 @@ vim.g.mapleader = " "
 
 vim.keymap.set("x", "p", [["_dP]], { desc = "Paste over selection without losing yanked text" })
 
-vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete without yanking" })
+vim.keymap.set({ "n", "v" }, "<leader>dd", [["_d]], { desc = "Delete without yanking" })
 
-vim.keymap.set("i", "<C-c>", "<Esc>")
-vim.keymap.set("n", "<leader>c", ":nohl<CR>", { desc = "Clear search highlighting", silent = true })
+vim.keymap.set("n", "<leader>c", "gcc", { desc = "Toggle comment", remap = true })
+vim.keymap.set("v", "<leader>c", "gc", { desc = "Toggle comment", remap = true })
+
+vim.keymap.set("n","U","<C-r>",{desc = "Redo"})
+
+vim.keymap.set("n", "<Esc>", ":nohl<CR>", { desc = "Clear search highlighting", silent = true })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines down in visual selection" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "moves lines up in visual selection" })
