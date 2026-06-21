@@ -5,6 +5,7 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/stevearc/conform.nvim.git",
+	"https://github.com/lukas-reineke/indent-blankline.nvim",
 	"https://github.com/mason-org/mason.nvim",
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/stevearc/aerial.nvim",
@@ -34,8 +35,8 @@ require("mini.tabline").setup()
 ---- mini statusline----
 require("mini.statusline").setup()
 
-vim.keymap.set("n", "H", "<cmd>bnext<CR>", { desc = "Next buffer" })
-vim.keymap.set("n", "L", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "L", "<cmd>bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "H", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 
 vim.keymap.set("n", "<leader>w", function()
 	require("mini.bufremove").delete(0, false)
@@ -112,6 +113,7 @@ require("mini.completion").setup({
 	lsp_completion = {
 		auto_setup = true,
 	},
+	fallback_action = "<C-x><C-f>",
 })
 
 --- mini snippets ---
@@ -138,6 +140,7 @@ require("conform").setup({
 		lua = { "stylua" },
 		go = { "gofumpt", "goimports" },
 		javascript = { "prettier" },
+		sh = { "shfmt" },
 		typescript = { "prettier" },
 		json = { "prettier" },
 		jsonc = { "prettier" },
@@ -151,6 +154,9 @@ require("conform").setup({
 vim.keymap.set("n", "ff", function()
 	require("conform").format({ async = true, lsp_format = "fallback" })
 end, { desc = "Format buffer" })
+
+--- lines ---
+require("ibl").setup()
 
 --- aerial ---
 require("aerial").setup()
