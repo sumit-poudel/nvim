@@ -1,15 +1,26 @@
 vim.pack.add({
 	"https://github.com/RRethy/base16-nvim",
 	"https://github.com/nvim-mini/mini.nvim",
+	"https://github.com/nvim-telescope/telescope.nvim",
+	"https://github.com/nvim-lua/plenary.nvim",
 	"https://github.com/rafamadriz/friendly-snippets",
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
 	"https://github.com/neovim/nvim-lspconfig",
-	"https://github.com/stevearc/conform.nvim.git",
+	"https://github.com/stevearc/conform.nvim",
 	"https://github.com/lukas-reineke/indent-blankline.nvim",
 	"https://github.com/mason-org/mason.nvim",
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/stevearc/aerial.nvim",
+	"https://github.com/brenton-leighton/multiple-cursors.nvim",
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
 })
+
+local map = vim.keymap.set
+
+--- mini icons ---
+local MiniIcons = require("mini.icons")
+MiniIcons.setup()
+MiniIcons.mock_nvim_web_devicons()
 
 -- mini files ----
 local MiniFiles = require("mini.files")
@@ -23,8 +34,8 @@ MiniFiles.setup({
 	},
 })
 
-vim.keymap.set("n", ";", "<cmd>lua MiniFiles.open()<CR>", { desc = "Toggle mini file explorer" })
-vim.keymap.set("n", "<leader>e", function()
+map("n", ";", "<cmd>lua MiniFiles.open()<CR>", { desc = "Toggle mini file explorer" })
+map("n", "<leader>e", function()
 	MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
 	MiniFiles.reveal_cwd()
 end, { desc = "Toggle into currently opened file" })
@@ -35,13 +46,13 @@ require("mini.tabline").setup()
 ---- mini statusline----
 require("mini.statusline").setup()
 
-vim.keymap.set("n", "L", "<cmd>bnext<CR>", { desc = "Next buffer" })
-vim.keymap.set("n", "H", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+map("n", "L", "<cmd>bnext<CR>", { desc = "Next buffer" })
+map("n", "H", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 
-vim.keymap.set("n", "<leader>w", function()
+map("n", "<leader>w", function()
 	require("mini.bufremove").delete(0, false)
 end, { desc = "Delete buffer" })
-vim.keymap.set("n", "<leader>i", function()
+map("n", "<leader>i", function()
 	local current = vim.api.nvim_get_current_buf()
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 		if buf ~= current and vim.api.nvim_buf_is_valid(buf) then
@@ -52,7 +63,6 @@ end, { desc = "Delete all buffers except current" })
 
 ---- mini notify ----
 require("mini.notify").setup({
-	-- only show messages
 	content = {
 		format = function(notif)
 			return notif.msg
@@ -68,45 +78,28 @@ require("mini.pairs").setup()
 
 --- mini surround ---
 require("mini.surround").setup()
--- Default Keymaps
--- | `sa` | Add surrounding or Direct with 'saiw' |
--- | `sd` | Delete surrounding |
--- | `sr` | Replace surrounding |
--- | `sf` | Find surrounding (right) |
--- | `sF` | Find surrounding (left) |
--- | `sh` | Highlight surrounding |
--- | `sn` | Update n_lines |
--- | `l` / `n` | as suffix for prev/next |
+
+--- mini ai ---
+--- mini ai ---
+require("mini.ai").setup()
 
 --- mini picker ---
-local MiniPick = require("mini.pick")
-local MiniExtra = require("mini.extra")
-MiniPick.setup()
-MiniExtra.setup()
+local builtin = require("telescope.builtin")
 
--- keymaps
-vim.keymap.set("n", "<leader>ff", function()
-	MiniPick.builtin.files()
-end, { desc = "Mini File Picker" })
-vim.keymap.set("n", "<leader>fg", function()
-	MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") })
-end, { desc = "Grep word/Search word" })
-vim.keymap.set("n", "<leader>hh", function()
-	MiniPick.builtin.help()
-end, { desc = "Mini Help" })
+map("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+map("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+map("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
+map("n", "<leader>hh", builtin.help_tags, { desc = "Telescope help tags" })
+map("n", "<leader>fd", builtin.diagnostics, { desc = "Telescope diagnostics" })
+map("n", "g.", builtin.quickfix, { desc = "quickfix text" })
+map("n", "<leader>pk", builtin.keymaps, { desc = "keymaps" })
 
-vim.keymap.set("n", "<leader>d", function()
-	MiniExtra.pickers.diagnostic()
-end, { desc = "Mini Picker Diagnostics" })
-vim.keymap.set("n", "<leader>j", function()
+map("n", "<leader>j", function()
 	vim.diagnostic.jump({ count = 1 })
 end, { desc = "Next diagnostic" })
-vim.keymap.set("n", "<leader>'", function()
+map("n", "<leader>'", function()
 	vim.diagnostic.jump({ count = -1 })
 end, { desc = "Prev diagnostic" })
-vim.keymap.set("n", "<leader>pk", function()
-	MiniExtra.pickers.keymaps()
-end, { desc = "Search keymaps" })
 
 --- mini completions ---
 require("mini.completion").setup({
@@ -120,7 +113,7 @@ require("mini.completion").setup({
 local MiniSnippets = require("mini.snippets")
 MiniSnippets.setup({
 	snippets = {
-		MiniSnippets.gen_loader.from_lang(), -- loads friendly-snippets
+		MiniSnippets.gen_loader.from_lang(),
 	},
 })
 MiniSnippets.start_lsp_server({ match = false })
@@ -131,8 +124,8 @@ MiniDiff.setup({
 	source = MiniDiff.gen_source.git({ index = false }),
 })
 
-vim.keymap.set("n", "<leader>gg", "<cmd>tabnew | Git | only<cr>", { desc = "Fugitive Full Page New Tab" })
-vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Git diff split" })
+map("n", "<leader>gg", "<cmd>tabnew | Git | only<cr>", { desc = "Fugitive Full Page New Tab" })
+map("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Git diff split" })
 
 --- conform ---
 require("conform").setup({
@@ -151,7 +144,7 @@ require("conform").setup({
 	},
 })
 
-vim.keymap.set("n", "ff", function()
+map("n", "ff", function()
 	require("conform").format({ async = true, lsp_format = "fallback" })
 end, { desc = "Format buffer" })
 
@@ -160,4 +153,23 @@ require("ibl").setup()
 
 --- aerial ---
 require("aerial").setup()
-vim.keymap.set("n", "<leader>o", "<cmd>AerialToggle<CR>", { desc = "Toggle aerial outline" })
+map("n", "<leader>o", "<cmd>AerialToggle<CR>", { desc = "Toggle aerial outline" })
+
+-- multi cursor ---
+require("multiple-cursors").setup({})
+map({ "n", "x" }, "<C-j>", "<Cmd>MultipleCursorsAddDown<CR>", { desc = "Add cursor and move down" })
+map({ "n", "x" }, "<C-k>", "<Cmd>MultipleCursorsAddUp<CR>", { desc = "Add cursor and move up" })
+map({ "n", "i", "x" }, "<C-Up>", "<Cmd>MultipleCursorsAddUp<CR>", { desc = "Add cursor and move up" })
+map({ "n", "i", "x" }, "<C-Down>", "<Cmd>MultipleCursorsAddDown<CR>", { desc = "Add cursor and move down" })
+map(
+	{ "n", "i" },
+	"<C-LeftMouse>",
+	"<Cmd>MultipleCursorsMouseAddDelete<CR>",
+	{ desc = "Add or remove cursor on mouse click" }
+)
+map(
+	{ "n" },
+	"<C-Return>",
+	"<Cmd>MultipleCursorsAddDelete<CR>",
+	{ desc = "Add a locked cursor or remove an existing cursor" }
+)
