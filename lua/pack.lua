@@ -6,6 +6,7 @@ vim.pack.add({
 	"https://github.com/rafamadriz/friendly-snippets",
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
 	"https://github.com/neovim/nvim-lspconfig",
+    "https://github.com/mfussenegger/nvim-lint",
 	"https://github.com/stevearc/conform.nvim",
 	"https://github.com/lukas-reineke/indent-blankline.nvim",
 	"https://github.com/mason-org/mason.nvim",
@@ -13,6 +14,7 @@ vim.pack.add({
 	"https://github.com/stevearc/aerial.nvim",
 	"https://github.com/brenton-leighton/multiple-cursors.nvim",
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
+    "https://github.com/akinsho/toggleterm.nvim",
 })
 
 local map = vim.keymap.set
@@ -39,6 +41,13 @@ map("n", "<leader>e", function()
 	MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
 	MiniFiles.reveal_cwd()
 end, { desc = "Toggle into currently opened file" })
+
+-- setup toggleterm
+require("toggleterm").setup({
+	open_mapping = [[<c-/>]], -- or [[<c-_>]]
+	direction = "vertical",
+	size = 60,
+})
 
 ---- mini tabline ----
 require("mini.tabline").setup()
