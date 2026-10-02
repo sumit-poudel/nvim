@@ -3,6 +3,21 @@ vim.g.netrw_banner = 0
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
+-- Toggle relative numbers based on mode
+vim.api.nvim_create_autocmd("InsertEnter", {
+	pattern = "*",
+	callback = function()
+		vim.opt.relativenumber = false
+	end,
+})
+
+vim.api.nvim_create_autocmd("InsertLeave", {
+	pattern = "*",
+	callback = function()
+		vim.opt.relativenumber = true
+	end,
+})
+
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -28,15 +43,15 @@ vim.opt.completeopt = "menuone,noselect,fuzzy,nosort"
 vim.opt.shortmess:append("c")
 vim.opt.clipboard:append("unnamedplus")
 vim.opt.isfname:append("@-@")
-vim.opt.guicursor = ""
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20"
 vim.opt.scrolloff = 8
 
 vim.opt.colorcolumn = "0"
 vim.opt.signcolumn = "yes"
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight when yanking (copying) text",
-    callback = function()
-        vim.hl.on_yank()
-    end,
+	desc = "Highlight when yanking (copying) text",
+	callback = function()
+		vim.hl.on_yank()
+	end,
 })

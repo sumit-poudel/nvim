@@ -115,6 +115,9 @@ MiniSnippets.setup({
 	snippets = {
 		MiniSnippets.gen_loader.from_lang(),
 	},
+	expand = {
+		trigger = "", -- No automatic trigger
+	},
 })
 MiniSnippets.start_lsp_server({ match = false })
 
@@ -131,6 +134,7 @@ map("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Git diff split" })
 require("conform").setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
+		c = { "clang-format" },
 		go = { "gofumpt", "goimports" },
 		javascript = { "prettier" },
 		sh = { "shfmt" },
