@@ -1,7 +1,10 @@
 require("mason").setup()
 
 vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Hover documentation" })
-vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
+vim.keymap.set("n", "<leader>d", function()
+	local enabled = vim.diagnostic.config().virtual_text and true or false
+	vim.diagnostic.config({ virtual_text = not enabled })
+end, { desc = "Toggle inline diagnostics" })
 
 vim.diagnostic.config({ virtual_text = true })
 
@@ -14,7 +17,7 @@ vim.lsp.config("lua_ls", {
 })
 
 vim.lsp.enable({
-	"lua-language-server",
+	"lua_ls",
 	"marksman",
 	"bashls",
 	"gopls",
@@ -29,5 +32,17 @@ require("lint").linters_by_ft = {
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 	callback = function()
 		require("lint").try_lint()
+	end,
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local opts = function(desc)
+			return { buffer = args.buf, desc = desc }
+		end
+
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts("Go to definition"))
+		vim.keymap.set("n", "cd", vim.lsp.buf.rename, opts("Rename symbol"))
+		vim.keymap.set({ "n", "v" }, "g.", vim.lsp.buf.code_action, opts("Code action"))
 	end,
 })

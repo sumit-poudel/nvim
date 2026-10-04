@@ -10,7 +10,19 @@ vim.keymap.set("v", "<leader>c", "gc", { desc = "Toggle comment", remap = true }
 
 vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
 
-vim.keymap.set("n", "<Esc>", ":nohl<CR>", { desc = "Clear search highlighting", silent = true })
+vim.keymap.set("n", "<Esc>", function()
+	vim.cmd("nohl")
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		local buf = vim.api.nvim_win_get_buf(win)
+		if
+			vim.api.nvim_win_get_config(win).relative ~= ""
+			and vim.bo[buf].buftype ~= "terminal"
+			and not vim.bo[buf].filetype:match("^minifiles")
+		then
+			pcall(vim.api.nvim_win_close, win, false)
+		end
+	end
+end, { desc = "Clear search highlight and close floats", silent = true })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines down in visual selection" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "moves lines up in visual selection" })
@@ -28,13 +40,20 @@ vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result cursor center
 
 vim.keymap.set(
 	"n",
-	"<leader>s",
+	"<leader>r",
 	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
 	{ desc = "Replace word cursor is on globally" }
 )
 vim.keymap.set("n", "<leader>X", "<cmd>!chmod +x %<CR>", { silent = true, desc = "makes file executable" })
 
-vim.keymap.set("n", "<leader>re", "<cmd>restart<cr>", { desc = "Restart config :restart)" })
+-- split
+vim.keymap.set("n", "<leader>-", "<cmd>new<CR>", { desc = "New file split below" })
+vim.keymap.set("n", "<leader>|", "<cmd>vnew<CR>", { desc = "New file split right" })
+vim.keymap.set("n", "<leader>sh", "<C-w>h", { desc = "Go to left split" })
+vim.keymap.set("n", "<leader>sl", "<C-w>l", { desc = "Go to right split" })
+vim.keymap.set("n", "<leader>sk", "<C-w>k", { desc = "Go to upper split" })
+vim.keymap.set("n", "<leader>sj", "<C-w>j", { desc = "Go to lower split" })
+
 
 -- native undotree
 vim.keymap.set("n", "<leader>u", function()

@@ -6,7 +6,7 @@ vim.pack.add({
 	"https://github.com/rafamadriz/friendly-snippets",
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
 	"https://github.com/neovim/nvim-lspconfig",
-    "https://github.com/mfussenegger/nvim-lint",
+	"https://github.com/mfussenegger/nvim-lint",
 	"https://github.com/stevearc/conform.nvim",
 	"https://github.com/lukas-reineke/indent-blankline.nvim",
 	"https://github.com/mason-org/mason.nvim",
@@ -14,7 +14,7 @@ vim.pack.add({
 	"https://github.com/stevearc/aerial.nvim",
 	"https://github.com/brenton-leighton/multiple-cursors.nvim",
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
-    "https://github.com/akinsho/toggleterm.nvim",
+	"https://github.com/akinsho/toggleterm.nvim",
 })
 
 local map = vim.keymap.set
@@ -44,10 +44,30 @@ end, { desc = "Toggle into currently opened file" })
 
 -- setup toggleterm
 require("toggleterm").setup({
-	open_mapping = [[<c-/>]], -- or [[<c-_>]]
 	direction = "vertical",
-	size = 60,
+	size = 80,
+	persist_size = true,
+	persist_mode = true,
+	shade_terminals = false,
 })
+
+local Terminal = require("toggleterm.terminal").Terminal
+local tmux_terms = {}
+
+local function toggle_tmux()
+	local cwd = vim.fn.getcwd()
+	if not tmux_terms[cwd] then
+		local name = vim.fs.basename(cwd):gsub("[.:]", "-")
+		tmux_terms[cwd] = Terminal:new({
+			cmd = "tmux new-session -A -s " .. vim.fn.shellescape(name),
+			direction = "vertical",
+			hidden = true,
+			close_on_exit = true,
+		})
+	end
+	tmux_terms[cwd]:toggle()
+end
+map({ "n", "t" }, "<c-/>", toggle_tmux, { desc = "Toggle tmux terminal" })
 
 ---- mini tabline ----
 require("mini.tabline").setup()
@@ -89,25 +109,32 @@ require("mini.pairs").setup()
 require("mini.surround").setup()
 
 --- mini ai ---
---- mini ai ---
-require("mini.ai").setup()
+local MiniAi = require("mini.ai")
+MiniAi.setup({
+	custom_textobjects = {
+		f = MiniAi.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
+		c = MiniAi.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
+		s = MiniAi.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
+		F = MiniAi.gen_spec.function_call(), -- old mini.ai `f` (call), optional
+	},
+})
 
 --- mini picker ---
+local MiniPick = require("mini.pick")
+MiniPick.setup()
+vim.ui.select = MiniPick.ui_select
 local builtin = require("telescope.builtin")
-
 map("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
 map("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
 map("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 map("n", "<leader>hh", builtin.help_tags, { desc = "Telescope help tags" })
 map("n", "<leader>fd", builtin.diagnostics, { desc = "Telescope diagnostics" })
-map("n", "g.", builtin.quickfix, { desc = "quickfix text" })
 map("n", "<leader>pk", builtin.keymaps, { desc = "keymaps" })
-
 map("n", "<leader>j", function()
-	vim.diagnostic.jump({ count = 1 })
+	vim.diagnostic.jump({ count = 1, float = true })
 end, { desc = "Next diagnostic" })
 map("n", "<leader>'", function()
-	vim.diagnostic.jump({ count = -1 })
+	vim.diagnostic.jump({ count = -1, float = true })
 end, { desc = "Prev diagnostic" })
 
 --- mini completions ---
@@ -124,6 +151,9 @@ MiniSnippets.setup({
 	snippets = {
 		MiniSnippets.gen_loader.from_lang(),
 	},
+	mappings = {
+		stop = "<c-k>",
+	},
 	expand = {
 		trigger = "", -- No automatic trigger
 	},
@@ -134,6 +164,9 @@ MiniSnippets.start_lsp_server({ match = false })
 local MiniDiff = require("mini.diff")
 MiniDiff.setup({
 	source = MiniDiff.gen_source.git({ index = false }),
+	mappings = {
+		apply = "", -- frees gh for LSP hover
+	},
 })
 
 map("n", "<leader>gg", "<cmd>tabnew | Git | only<cr>", { desc = "Fugitive Full Page New Tab" })
