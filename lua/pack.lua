@@ -15,6 +15,8 @@ vim.pack.add({
 	"https://github.com/brenton-leighton/multiple-cursors.nvim",
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
 	"https://github.com/akinsho/toggleterm.nvim",
+	"https://github.com/hyperpuncher/datastar-lsp",
+	"https://github.com/hyperpuncher/tree-sitter-datastar",
 })
 
 local map = vim.keymap.set
@@ -70,7 +72,13 @@ end
 map({ "n", "t" }, "<c-/>", toggle_tmux, { desc = "Toggle tmux terminal" })
 
 ---- mini tabline ----
-require("mini.tabline").setup()
+require("mini.tabline").setup({
+	format = function(buf_id, label)
+		local icon = MiniIcons.get("file", label)
+		local suffix = vim.bo[buf_id].modified and " *" or ""
+		return " " .. icon .. " " .. label .. suffix .. " "
+	end,
+})
 
 ---- mini statusline----
 require("mini.statusline").setup()
@@ -187,6 +195,7 @@ require("conform").setup({
 		css = { "prettier" },
 		kdl = { "kdlfmt" },
 		toml = { "taplo" },
+		templ = { "templ" },
 	},
 })
 

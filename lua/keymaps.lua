@@ -38,6 +38,11 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move up in buffer with cursor 
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next search result cursor centered" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result cursor centered" })
 
+vim.keymap.set("n", "<C-[>", "zc", { desc = "Fold" })
+vim.keymap.set("n", "<C-]>", "zo", { desc = "Unfold" })
+vim.keymap.set("n", "<C-M-[>", "zM", { desc = "Fold all" })
+vim.keymap.set("n", "<C-M-]>", "zR", { desc = "Unfold all" })
+
 vim.keymap.set(
 	"n",
 	"<leader>r",

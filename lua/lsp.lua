@@ -15,6 +15,19 @@ vim.lsp.config("lua_ls", {
 		},
 	},
 })
+vim.lsp.config("emmet_language_server", {
+	filetypes = {
+		"html",
+		"templ",
+	},
+})
+vim.lsp.config("tailwindcss", {
+	settings = {
+		tailwindCSS = {
+			includeLanguages = { templ = "html" },
+		},
+	},
+})
 
 vim.lsp.enable({
 	"lua_ls",
@@ -23,7 +36,13 @@ vim.lsp.enable({
 	"gopls",
 	"taplo",
 	"rust_analyzer",
+	"emmet_language_server",
+	"tailwindcss",
+	"templ",
+	"html",
 })
+
+require("datastar-lsp").setup({})
 
 require("lint").linters_by_ft = {
 	go = { "golangci-lint" },
