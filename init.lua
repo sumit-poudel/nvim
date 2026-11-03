@@ -1,3 +1,5 @@
+-- :MasonInstall lua-language-server marksman bash-language-server gopls taplo rust-analyzer emmet-language-server tailwindcss-language-server templ html-lsp stylua clang-format gofumpt goimports prettier shfmt kdlfmt golangci-lint
+
 require("vim._core.ui2").enable({})
 
 require("options")

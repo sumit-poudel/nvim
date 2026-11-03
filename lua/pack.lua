@@ -4,19 +4,21 @@ vim.pack.add({
 	"https://github.com/nvim-telescope/telescope.nvim",
 	"https://github.com/nvim-lua/plenary.nvim",
 	"https://github.com/rafamadriz/friendly-snippets",
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/mfussenegger/nvim-lint",
 	"https://github.com/stevearc/conform.nvim",
 	"https://github.com/lukas-reineke/indent-blankline.nvim",
 	"https://github.com/mason-org/mason.nvim",
+	"https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/stevearc/aerial.nvim",
 	"https://github.com/brenton-leighton/multiple-cursors.nvim",
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
 	"https://github.com/akinsho/toggleterm.nvim",
 	"https://github.com/hyperpuncher/datastar-lsp",
 	"https://github.com/hyperpuncher/tree-sitter-datastar",
+	"https://github.com/github/copilot.vim",
 })
 
 local map = vim.keymap.set

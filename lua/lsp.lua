@@ -1,4 +1,28 @@
 require("mason").setup()
+require("mason-tool-installer").setup({
+	auto_update = false,
+	run_on_start = true,
+	ensure_installed = {
+		"lua-language-server",
+		"marksman",
+		"bash-language-server",
+		"gopls",
+		"taplo",
+		"rust-analyzer",
+		"emmet-language-server",
+		"tailwindcss-language-server",
+		"templ",
+		"html-lsp",
+		"stylua",
+		"clang-format",
+		"gofumpt",
+		"goimports",
+		"prettier",
+		"shfmt",
+		"kdlfmt",
+		"golangci-lint",
+	},
+})
 
 vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Hover documentation" })
 vim.keymap.set("n", "<leader>d", function()
